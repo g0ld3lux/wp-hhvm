@@ -1,0 +1,16 @@
+docker run --rm --name wp_mariadb \
+  -e MYSQL_ROOT_PASSWORD=jmR89PVaEP9YQNZcLgG0 \
+  -e MYSQL_USER=supervip -e MYSQL_PASSWORD=peShzzc3NLr6Hgxh0nUL \
+  -e MYSQL_DATABASE=wordpress \
+  -v ${pwd}/data:/var/lib/mysql \
+  "mariadb:10.1"
+
+docker build -t wordpress .
+
+docker run --rm --name wp_web \
+  --link "benchmark_mariadb:MYSQL" \
+  -p 80:80 -p 443:443 \
+  -v ${pwd}/backup:/var/www/backup \
+  -v ${pwd}/log:/var/log \
+  -v ${pwd}/cache:/var/cache/hhvm \
+  wordpress
